@@ -1,0 +1,41 @@
+FROM rednoah/filebot
+
+LABEL maintainer="Reinhard Pointner <rednoah@filebot.net>"
+
+
+ENV FILEBOT_NODE_VERSION="0.4.8.1"
+ENV FILEBOT_NODE_URL="https://github.com/filebot/filebot-node/releases/download/$FILEBOT_NODE_VERSION/filebot-node_$FILEBOT_NODE_VERSION.tar.xz"
+ENV FILEBOT_NODE_SHA256="5ca37c10fc3fb40ee41b91aa5e7955e09724c9e1beeedbd62f07b650abe31e39"
+
+
+ENV FILEBOT_NODE_HOME="/opt/filebot-node"
+
+
+RUN set -eux \
+ ## ** install dependencies
+ && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs \
+ && rm -rf /var/lib/apt/lists/* \
+ ## ** fetch generic package
+ && curl -L -o /tmp/filebot-node.tar.xz "$FILEBOT_NODE_URL" \
+ && echo "$FILEBOT_NODE_SHA256 */tmp/filebot-node.tar.xz" | sha256sum -c - \
+ ## ** install application files
+ && mkdir -p "$FILEBOT_NODE_HOME" \
+ && tar --extract --file /tmp/filebot-node.tar.xz --directory "$FILEBOT_NODE_HOME" --verbose \
+ && rm -v /tmp/filebot-node.tar.xz \
+ ## ** delete generic launcher scripts
+ && find "$FILEBOT_NODE_HOME" -executable -type f -delete
+
+# install custom launcher scripts
+COPY node /
+
+
+ENV FILEBOT_NODE_AUTH="NONE"
+ENV FILEBOT_NODE_HTTP="YES"
+ENV FILEBOT_NODE_HTTP_PORT="5452"
+
+
+EXPOSE $FILEBOT_NODE_HTTP_PORT
+
+ENTRYPOINT ["/opt/bin/run-as-user", "/opt/bin/run", "/opt/filebot-node/start"]
